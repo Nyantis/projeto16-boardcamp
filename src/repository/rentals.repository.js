@@ -3,10 +3,51 @@ import { _continue } from "../middlewares/generic.middlewares.js";
 
 export async function listRentals(){
     try{
-        const customers = await connection.query(`SELECT * FROM rentals`)
+        const customers = await connection.query(`
+        SELECT 
+          rentals.id AS rentalId,
+          rentals."customerId",
+          rentals."gameId",
+          rentals."rentDate",
+          rentals."daysRented",
+          rentals."returnDate",
+          rentals."originalPrice",
+          rentals."delayFee",
+          customers.name as "customerName",
+          games.name as "gameName"
+        FROM rentals
+        JOIN customers ON
+          customers.id = rentals."customerId"
+        JOIN games ON
+          games.id = rentals."gameId"
+        `)
+
+        const data = customers.rows.map(item => {
+            return {
+                    id: item.rentalId,
+                    customerId: item.customerId,
+                    gameId: item.gameId,
+                    rentDate: item.rentDate,
+                    daysRented: item.daysRented,
+                    returnDate: item.returnDate, // troca pra uma data quando já devolvido
+                    originalPrice: item.originalPrice,
+                    delayFee: item.delayFee,
+                    customer: {
+                        id: 1,
+                        name: item.customerName
+                    },
+                    game: {
+                        id: 1,
+                        name: item.gameName
+                    }
+                }
+            }
+        )
+
+
         return {
             code: 200,
-            message: customers.rows
+            message: data
         }
 
     }catch(err){
