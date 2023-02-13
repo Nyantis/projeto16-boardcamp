@@ -1,9 +1,12 @@
 import { connection } from "../database/db.js";
 import { _continue } from "../middlewares/generic.middlewares.js";
 
-export async function listGames(){
+export async function listCustomers(id){
+    const insert = id ? "WHERE id = $1" : ""
+    const insArr = id ? [id] : []
+
     try{
-        const games = await connection.query(`SELECT * FROM games`)
+        const games = await connection.query(`SELECT * FROM customers ${insert}`, insArr)
         return {
             code: 200,
             message: games.rows
@@ -21,17 +24,17 @@ export async function listGames(){
 
 
 
-export async function createGame(body){
+export async function createCustomer(body){
     try {
-        const game = await connection.query(`
-            INSERT INTO games (
+        await connection.query(`
+            INSERT INTO customers (
                 name, 
-                image, 
-                "stockTotal", 
-                "pricePerDay"
+                phone, 
+                cpf, 
+                birthday
                 ) 
             VALUES ($1, $2, $3, $4)`, 
-            [body.name, body.image, body.stockTotal, body.pricePerDay])
+            [body.name, body.phone, body.cpf, body.birthday])
 
         return {
             code: 201,
@@ -50,12 +53,12 @@ export async function createGame(body){
 
 
 
-export async function checkGameAlreadyExists(name){
+export async function checkCustomerAlreadyExists(cpf){
     try {
-        const game = await connection.query(`SELECT name FROM games WHERE name = $1`, [name])
-        return game.rowCount > 0 ? {
+        const customer = await connection.query(`SELECT cpf FROM customers WHERE cpf = $1`, [cpf])
+        return customer.rowCount > 0 ? {
             code: 409,
-            message: "This game name already exists"
+            message: "This cpf is already taken"
         } : _continue
 
     } catch (err) {

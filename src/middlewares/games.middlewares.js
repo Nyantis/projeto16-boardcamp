@@ -1,19 +1,15 @@
 import { gameSchema } from "../models/Games.js";
 import { checkGameAlreadyExists } from "../repository/games.repository.js";
-import schemaValidation from "./schemaValidation.js";
+import schemaValidation from "./generic.middlewares.js";
 
 export async function postGameValidation(req, res, next) {
-    const user = req.body;
+    const game = req.body;
 
-    const errors = await schemaValidation(gameSchema, user)
-    if(errors){
-        return res.status(400).send(errors);
-    }
+    {const { code, message } = schemaValidation(gameSchema, game)
+    if(code){return res.status(code).send(message)}}
 
-    const gameExists = await checkGameAlreadyExists(req.body.name)
-    if(gameExists.code !== 0){
-        return res.status(gameExists.code).send(gameExists.message);
-    }
+    {const { code, message } = await checkGameAlreadyExists(game.name)
+    if(code){return res.status(code).send(message)}}
 
     next();
   }

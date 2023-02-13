@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { postGame, list } from "../controllers/customers.controllers.js";
-import { postGameValidation } from "../middlewares/customers.middlewares.js";
+import { create, list } from "../controllers/customers.controllers.js";
+import { createCustomerValidation } from "../middlewares/customers.middlewares.js";
+import { idParamSanitization } from "../middlewares/generic.middlewares.js";
 
 const router = Router()
 
-router.get("/customers", list)
-router.post("/customers", postGameValidation, postGame)
+router.get("/customers/:id?", idParamSanitization, list)
+router.post("/customers", createCustomerValidation, create)
 
 
 export default router
