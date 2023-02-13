@@ -20,16 +20,3 @@ export async function createRentalValidation(req, res, next) {
 
     next();
 }
-
-export async function finishRentalValidation(req, res, next) {
-    const rental = req.body;
-    const { id } = res.locals
-
-    {const { code, message } = schemaValidation(rentalSchema, rental)
-    if(code){return res.status(code).send(message)}}
-
-    // {const { code, message } = await checkCustomerCpf(customer.cpf, id)
-    // if(code){return res.status(code).send(message)}}
-
-    next();
-}

@@ -21,14 +21,22 @@ export async function create(req, res){
     return res.status(code).send(message)
 }
 
-export async function finish(req, res){
-    const { id } = res.locals
-    const { code, message} = await finishRental(id, req.body)
-    return res.status(code).send(message)
-}
+// export async function finish(req, res){
+//     const { id, rent } = res.locals
+//     const returnDate = dayjs().format('YYYY-MM-DD')
+//     let diff
 
-export async function exclude(req, res){
-    const { id } = res.locals
-    const { code, message} = await deleteRental(id)
-    return res.status(code).send(message)
-}
+//     if(dayjs(returnDate).isBefore(, 'day')){
+//         diff = date1.diff(returnDate, 'day')
+//     }
+
+    
+//     const { code, message } = await finishRental(id, req.body)
+//     return res.status(code).send(message)
+// }
+
+// export async function exclude(req, res){
+//     const { id } = res.locals
+//     const { code, message} = await deleteRental(id)
+//     return res.status(code).send(message)
+// }
