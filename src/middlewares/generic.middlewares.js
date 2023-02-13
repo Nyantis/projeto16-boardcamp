@@ -21,7 +21,10 @@ export async function idParamSanitization(req, res, next) {
     next();
   }
 
-export const _continue = {
+export function _continue(info) {
+    return {
     code: null,
-    message: null
+    message: null,
+    ...info
+    }
 }
