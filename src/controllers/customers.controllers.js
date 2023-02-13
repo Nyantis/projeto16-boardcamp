@@ -1,4 +1,4 @@
-import { createCustomer, listCustomers } from "../repository/customers.repository.js";
+import { createCustomer, listCustomers, updateCustomer } from "../repository/customers.repository.js";
 
 export async function list(req, res){
     const { id } = res.locals
@@ -8,5 +8,11 @@ export async function list(req, res){
 
 export async function create(req, res){
     const { code, message } = await createCustomer(req.body)
+    return res.status(code).send(message)
+}
+
+export async function update(req, res){
+    const { id } = res.locals
+    const { code, message} = await updateCustomer(id, req.body)
     return res.status(code).send(message)
 }
