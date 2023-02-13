@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import customerRoutes from "./routes/retrieve.routes.js"
+import customerRoutes from "./routes/games.routes.js"
 
 dotenv.config();
 const port = process.env.PORT || 5000;
